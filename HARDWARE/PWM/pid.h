@@ -1,0 +1,7 @@
+#ifndef _PID_H
+#define _PID_H
+#include "sys.h"
+//////////////////////////////////////////////////////////////////////////////////	 
+void TIM6_Init(u32 arr,u32 psc);
+void NVIC_Configuration(void);
+#endif
