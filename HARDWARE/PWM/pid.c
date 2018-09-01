@@ -4,22 +4,23 @@
 ////////////
 extern float ADC_ValueLocal[2]; 
 float U1,U2,duty1,duty2;
-float U1_want=1.95,U2_want=2.2;
+float U1_want=2.36,U2_want=1.76;//min POWER U1_want=2.15,U2_want=1.55
 float pid_error1,pid_error2;
 arm_pid_instance_f32 PID;
 ////////////////////////////////////
-float Kp=150,Ki=0,Kd=0;
+float Kp=110,Ki=0,Kd=0;
 float pid_sum=0;
 float error_last=0;
+int EN_P=1,EN_I=1,EN_D=1;
 
 float pid_1(float pid_error)//Î»ÖÃĞÍ£¬error=ideal-real;
 {
 	float output,pid_dev;
 	pid_sum+=pid_error;
-	if(Ki*pid_sum>50) pid_sum=50/Ki;
-		else if(Ki*pid_sum<-50) pid_sum=-50/Ki;
+//	if(Ki*pid_sum>50) pid_sum=50/Ki;
+//		else if(Ki*pid_sum<-50) pid_sum=-50/Ki;
 	pid_dev=pid_error-error_last;
-	output=Kp*pid_error+Ki*pid_sum+Kd*pid_dev;
+	output=Kp*EN_P*pid_error+Ki*EN_I*pid_sum+Kd*EN_D*pid_dev;
 	if(output>100) output=100;
 	else if(output<-100) output=-100;
 	return output;
@@ -50,6 +51,7 @@ void TIM6_Init(u32 arr,u32 psc)//tim6
 
 void TIM6_DAC_IRQHandler(void)
 {
+	//ADC_VAL_AVG();//
 	ADC_VAL();
 	U1=ADC_ValueLocal[0];
 	U2=ADC_ValueLocal[1]; 

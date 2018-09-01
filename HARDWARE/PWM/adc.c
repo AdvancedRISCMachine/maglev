@@ -13,19 +13,20 @@ void ADC_VAL(void)
 	ADC_ValueLocal[0]=(float)(p1*3.3/4096/NUM);
 	ADC_ValueLocal[1]=(float)(p2/NUM*3.3/4096);
 }
-//void ADC_VAL_AVG(void)//不能放在TIM7 的IRQn
-//{	int i=0,t,N=300;
-//	uint32_t p1=0,p2=0,p3=0;
-//	for( t=0;t<N;t++)
-//	{
-//			for(i=0;i<NUM;i++)
-//			{
-//				p1+=ADC_ConvertedValue[i][0];p2+=ADC_ConvertedValue[i][1];
-//			}
-//	}
+void ADC_VAL_AVG(void)//不能放在TIM7 的IRQn
+{	int i=0,t=0,N=50;
+	uint32_t p1=0,p2=0;
+	for( t=0;t<N;t++)
+	{
+			for(i=0;i<NUM;i++)
+			{
+				p1+=ADC_ConvertedValue[i][0];p2+=ADC_ConvertedValue[i][1];
+			}
+	}
 
-//	I1_val=(float)p1/NUM/N;	U1_val=(float)p2/NUM/N;	
-//}
+	ADC_ValueLocal[0]=(float)(p1*3.3/4096/NUM/N);
+	ADC_ValueLocal[1]=(float)(p2/NUM*3.3/4096/N);
+}
 
 /////////////////
 static void Rheostat_ADC_GPIO_Config(void)
